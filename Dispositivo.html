@@ -1,0 +1,271 @@
+<!--<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dispositivos Dinámicos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+  <nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Dispositivos</span>
+    <div class="ms-auto">
+      <button class="btn btn-light"><a href="Menu.html">Regresar</a></button>
+      <button class="btn btn-outline-light me-2" id="btnRefrescar">Refrescar</button>
+      <button class="btn btn-success me-2" id="btnIniciar">Iniciar</button>
+      <button class="btn btn-danger" id="btnDetener">Detener</button>
+      <a class="btn btn-secondary ms-2" href="RegistroDispositivo.html">Agregar Nuevo</a>
+    </div>
+  </nav>
+
+  <div class="container mt-4" id="contenedorDispositivos"></div>
+
+  <script>
+    let dispositivos = JSON.parse(localStorage.getItem('dispositivos') || '[]');
+    let nIntervId = null;
+
+    function estadoTexto(estado) {
+      return estado === 1 ? 'Encendido' :
+             estado === 2 ? 'Apagado' :
+             estado === 3 ? 'Bloqueado' : 'Desconocido';
+    }
+
+    function operaTexto(estatus) {
+      return estatus === 1 ? 'Normal' :
+             estatus === 2 ? 'Advertencia' :
+             estatus === 3 ? 'Error' : 'Desconocido';
+    }
+
+    function refresh() {
+      const desviacion = 0.05;
+
+      dispositivos.forEach((item, index) => {
+        let voltaje = item.identifica.voltaje.minimo +
+          (((item.identifica.voltaje.maximo - item.identifica.voltaje.minimo) +
+            (item.identifica.voltaje.nominal * desviacion)) * Math.random());
+
+        let corriente = item.identifica.corriente.minimo +
+          (((item.identifica.corriente.maximo - item.identifica.corriente.minimo) +
+            (item.identifica.corriente.nominal * desviacion)) * Math.random());
+
+        let caudal = item.identifica.caudal.minimo +
+          (((item.identifica.caudal.maximo - item.identifica.caudal.minimo) +
+            (item.identifica.caudal.nominal * 0.10)) * Math.random());
+
+        dispositivos[index].opera = {
+          voltaje: voltaje.toFixed(2),
+          corriente: corriente.toFixed(2),
+          caudal: caudal.toFixed(2),
+          estatus: 1
+        };
+      });
+
+      renderDispositivos();
+    }
+
+    function start() {
+      if (!nIntervId) {
+        nIntervId = setInterval(refresh, 1000);
+      }
+    }
+
+    function stop() {
+      clearInterval(nIntervId);
+      nIntervId = null;
+    }
+
+    function renderDispositivos() {
+      const contenedor = document.getElementById('contenedorDispositivos');
+      contenedor.innerHTML = '';
+
+      if (dispositivos.length === 0) {
+        contenedor.innerHTML = `<div class="alert alert-warning mt-3">No hay dispositivos registrados.</div>`;
+        return;
+      }
+
+      dispositivos.forEach((d, index) => {
+        const card = document.createElement('div');
+        card.className = 'card shadow mb-4';
+
+        card.innerHTML = `
+          <div class="card-header bg-primary text-white">
+            <strong>${d.identifica.nombre}</strong> (ID: ${d.identifica.identificador})
+          </div>
+          <div class="card-body">
+            <p><strong>Ubicación:</strong> ${d.identifica.ubicacion}</p>
+            <p><strong>Coordenadas:</strong> ${d.identifica.coordenadas}</p>
+            <p><strong>Estado:</strong> ${estadoTexto(d.estado)}</p>
+            <p><strong>Estatus de Operación:</strong> ${operaTexto(d.opera?.estatus || 1)}</p>
+            <p><strong>Voltaje:</strong> ${d.opera?.voltaje || '-'} V</p>
+            <p><strong>Corriente:</strong> ${d.opera?.corriente || '-'} A</p>
+            <p><strong>Caudal:</strong> ${d.opera?.caudal || '-'} ${d.identifica.caudal.um}</p>
+            <div class="d-flex gap-2 mt-2">
+              <button class="btn btn-success btn-sm" onclick="actualizarEstado(${index}, 1)">Iniciar</button>
+              <button class="btn btn-danger btn-sm" onclick="actualizarEstado(${index}, 2)">Detener</button>
+              <button class="btn btn-warning btn-sm" onclick="actualizarEstado(${index}, 3)">Bloquear</button>
+            </div>
+          </div>
+        `;
+        contenedor.appendChild(card);
+      });
+    }
+
+    function actualizarEstado(index, nuevoEstado) {
+      dispositivos[index].estado = nuevoEstado;
+      renderDispositivos();
+    }
+
+    // Inicializar
+    document.getElementById('btnRefrescar').addEventListener('click', refresh);
+    document.getElementById('btnIniciar').addEventListener('click', start);
+    document.getElementById('btnDetener').addEventListener('click', stop);
+
+    renderDispositivos();
+  </script>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dispositivos Dinámicos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+  <nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Dispositivos</span>
+    <div class="ms-auto">
+      <button class="btn btn-link"><a href="Menu.html">Regresar</a></button>
+      <button class="btn btn-outline-light me-2" id="btnRefrescar">Refrescar</button>
+      <button class="btn btn-success me-2" id="btnIniciar">Iniciar</button>
+      <button class="btn btn-danger" id="btnDetener">Detener</button>
+      <a class="btn btn-secondary ms-2" href="RegistroDispositivo.html">Agregar Nuevo</a>
+    </div>
+  </nav>
+
+  <div class="container mt-4" id="contenedorDispositivos"></div>
+
+  <script>
+    let dispositivos = JSON.parse(localStorage.getItem('dispositivos') || '[]');
+    let nIntervId = null;
+
+    function estadoTexto(estado) {
+      return estado === 1 ? 'Encendido' :
+             estado === 2 ? 'Apagado' :
+             estado === 3 ? 'Bloqueado' : 'Desconocido';
+    }
+
+    function operaTexto(estatus) {
+      return estatus === 1 ? 'Normal' :
+             estatus === 2 ? 'Advertencia' :
+             estatus === 3 ? 'Error' : 'Desconocido';
+    }
+
+    function refresh() {
+      const desviacion = 0.05;
+      dispositivos.forEach((item, index) => {
+        let voltaje = item.identifica.voltaje.minimo +
+          (((item.identifica.voltaje.maximo - item.identifica.voltaje.minimo) +
+            (item.identifica.voltaje.nominal * desviacion)) * Math.random());
+
+        let corriente = item.identifica.corriente.minimo +
+          (((item.identifica.corriente.maximo - item.identifica.corriente.minimo) +
+            (item.identifica.corriente.nominal * desviacion)) * Math.random());
+
+        let caudal = item.identifica.caudal.minimo +
+          (((item.identifica.caudal.maximo - item.identifica.caudal.minimo) +
+            (item.identifica.caudal.nominal * 0.10)) * Math.random());
+
+        dispositivos[index].opera = {
+          voltaje: voltaje.toFixed(2),
+          corriente: corriente.toFixed(2),
+          caudal: caudal.toFixed(2),
+          estatus: 1
+        };
+      });
+
+      renderDispositivos();
+    }
+
+    function start() {
+      if (!nIntervId) {
+        nIntervId = setInterval(refresh, 1000);
+      }
+    }
+
+    function stop() {
+      clearInterval(nIntervId);
+      nIntervId = null;
+    }
+
+    function actualizarEstado(index, nuevoEstado) {
+      dispositivos[index].estado = nuevoEstado;
+      renderDispositivos();
+    }
+
+    function renderDispositivos() {
+      const contenedor = document.getElementById('contenedorDispositivos');
+      contenedor.innerHTML = '';
+
+      if (dispositivos.length === 0) {
+        contenedor.innerHTML = `<div class="alert alert-warning mt-3">No hay dispositivos registrados.</div>`;
+        return;
+      }
+
+      dispositivos.forEach((d, index) => {
+        const card = document.createElement('div');
+        card.className = 'card shadow mb-4';
+
+        card.innerHTML = `
+          <div class="card-header bg-primary text-white">
+            <strong>${d.identifica.nombre}</strong> (ID: ${d.identifica.identificador})
+          </div>
+          <div class="card-body">
+            <p><strong>Ubicación:</strong> ${d.identifica.ubicacion}</p>
+            <p><strong>Coordenadas:</strong> ${d.identifica.coordenadas}</p>
+            <p><strong>Fecha de Registro:</strong> ${d.identifica.fechaRegistro}</p>
+            <p><strong>Estado:</strong> ${estadoTexto(d.estado)}</p>
+            <p><strong>Estatus de Operación:</strong> ${operaTexto(d.opera?.estatus || 1)}</p>
+            <hr>
+            <h6>⚙️ Parámetros Técnicos</h6>
+            <p><strong>Potencia:</strong> ${d.identifica.potencia.nominal} ${d.identifica.potencia.um} 
+              (min: ${d.identifica.potencia.minimo}, max: ${d.identifica.potencia.maximo})</p>
+            <p><strong>Voltaje:</strong> ${d.identifica.voltaje.nominal} ${d.identifica.voltaje.um} 
+              (min: ${d.identifica.voltaje.minimo}, max: ${d.identifica.voltaje.maximo})</p>
+            <p><strong>Corriente:</strong> ${d.identifica.corriente.nominal} ${d.identifica.corriente.um} 
+              (min: ${d.identifica.corriente.minimo}, max: ${d.identifica.corriente.maximo})</p>
+            <p><strong>Caudal:</strong> ${d.identifica.caudal.nominal} ${d.identifica.caudal.um} 
+              (min: ${d.identifica.caudal.minimo}, max: ${d.identifica.caudal.maximo})</p>
+            <hr>
+            <h6>📡 Datos en Tiempo Real</h6>
+            <p><strong>Voltaje:</strong> ${d.opera?.voltaje || '-'} V</p>
+            <p><strong>Corriente:</strong> ${d.opera?.corriente || '-'} A</p>
+            <p><strong>Caudal:</strong> ${d.opera?.caudal || '-'} ${d.identifica.caudal.um}</p>
+
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-success btn-sm" onclick="actualizarEstado(${index}, 1)">Iniciar</button>
+              <button class="btn btn-danger btn-sm" onclick="actualizarEstado(${index}, 2)">Detener</button>
+              <button class="btn btn-warning btn-sm" onclick="actualizarEstado(${index}, 3)">Bloquear</button>
+            </div>
+          </div>
+        `;
+        contenedor.appendChild(card);
+      });
+    }
+
+    // Eventos de botones
+    document.getElementById('btnRefrescar').addEventListener('click', refresh);
+    document.getElementById('btnIniciar').addEventListener('click', start);
+    document.getElementById('btnDetener').addEventListener('click', stop);
+
+    // Primera carga
+    renderDispositivos();
+  </script>
+</body>
+</html>
+
+
