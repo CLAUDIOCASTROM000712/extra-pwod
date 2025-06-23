@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login y Registro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light py-5">
+
+  <!-- Registro -->
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-5 mb-4">
+        <div class="card shadow">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-4">Registrarse</h2>
+            <form id="registroForm">
+              <div class="mb-3">
+                <label for="registroNombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="registroNombre" name="nombre" required>
+              </div>
+              <div class="mb-3">
+                <label for="registroUsuario" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="registroUsuario" name="usuario" required>
+              </div>
+              <div class="mb-3">
+                <label for="registroContraseña" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="registroContraseña" name="contraseña" required>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">Crear Cuenta</button>
+                <a href="login.html" class="btn btn-danger">Cancelar</a>
+              </div>
+            </form>
+            <div id="mensaje" class="mt-3 text-center"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JavaScript personalizado -->
+  <script>
+    const form = document.getElementById('registroForm');
+    const mensaje = document.getElementById('mensaje');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevenir el envío real del formulario
+
+      const nombre = document.getElementById('registroNombre').value.trim();
+      const usuario = document.getElementById('registroUsuario').value.trim();
+      const contraseña = document.getElementById('registroContraseña').value;
+
+      if (nombre === '' || usuario === '' || contraseña === '') {
+        mensaje.textContent = 'Por favor, complete todos los campos.';
+        mensaje.className = 'text-danger';
+        return;
+      }
+
+      // Guardar el usuario en localStorage
+      const nuevoUsuario = {
+        nombre: nombre,
+        usuario: usuario,
+        contraseña: contraseña
+      };
+
+      // Comprobar si ya existe un usuario con ese nombre
+      const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+      const existe = usuarios.find(u => u.usuario === usuario);
+
+      if (existe) {
+        mensaje.textContent = 'Este usuario ya está registrado.';
+        mensaje.className = 'text-danger';
+        return;
+      }
+
+      usuarios.push(nuevoUsuario);
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+      mensaje.textContent = 'Registro exitoso. ¡Ahora puedes iniciar sesión!';
+      mensaje.className = 'text-success';
+
+      // Limpiar el formulario
+      form.reset();
+    });
+  </script>
+</body>
+</html>
+
+
+

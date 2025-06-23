@@ -1,0 +1,167 @@
+<!-- RegistroDispositivo.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Dispositivo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light py-5">
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white text-center">
+            <h4>Registro de Dispositivo</h4>
+          </div>
+          <div class="card-body">
+            <form id="formDispositivo">
+              <div class="mb-3">
+                <label for="identificador" class="form-label">Identificador</label>
+                <input type="number" class="form-control" id="identificador" required>
+              </div>
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" required>
+              </div>
+              <div class="mb-3">
+                <label for="ubicacion" class="form-label">Ubicación</label>
+                <textarea class="form-control" id="ubicacion" rows="2" required></textarea>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">Registrar Dispositivo</button>
+                <a href="Menu.html" class="btn btn-secondary">Cancelar</a>
+              </div>
+            </form>
+            <div id="mensaje" class="mt-4 text-center"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--<script>
+    const form = document.getElementById('formDispositivo');
+    const mensaje = document.getElementById('mensaje');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const identificador = parseInt(document.getElementById('identificador').value);
+      const nombre = document.getElementById('nombre').value.trim();
+      const ubicacion = document.getElementById('ubicacion').value.trim();
+
+      if (!identificador || !nombre || !ubicacion) {
+        mensaje.innerHTML = `<div class="alert alert-danger">Todos los campos son obligatorios.</div>`;
+        return;
+      }
+
+      const dispositivo = {
+        identifica: {
+          identificador: identificador,
+          nombre: nombre,
+          ubicacion: ubicacion,
+          coordenadas: '19.7060° N, 101.1950° W',
+          idestatus: 1,
+          estatus: 'Operacion Normal',
+          potencia: { nominal: 7.4, minimo: 6.2, maximo: 8.6, um: 'KW' },
+          voltaje: { nominal: 240, minimo: 230, maximo: 250, um: 'Volts' },
+          corriente: { nominal: 30, minimo: 25, maximo: 35, um: 'Amperes' },
+          caudal: { nominal: 1, minimo: 0.10, maximo: 1.20, um: 'm3/minuto' },
+          fechaRegistro: new Date().toUTCString()
+        },
+        opera: {
+          voltaje: 240,
+          corriente: 30,
+          caudal: 1,
+          estatus: 1
+        },
+        estado: 1
+      };
+
+      // Guardar en localStorage (sobrescribe el anterior)
+      localStorage.setItem('dispositivoActual', JSON.stringify(dispositivo));
+
+      mensaje.innerHTML = `<div class="alert alert-success">Dispositivo registrado correctamente. Redirigiendo...</div>`;
+
+      setTimeout(() => {
+        window.location.href = 'Dispositivo.html';
+      }, 1500);
+    });
+  </script>-->
+
+  <script>
+  const form = document.getElementById('formDispositivo');
+  const mensaje = document.getElementById('mensaje');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const identificador = parseInt(document.getElementById('identificador').value);
+    const nombre = document.getElementById('nombre').value.trim();
+    const ubicacion = document.getElementById('ubicacion').value.trim();
+
+    if (!identificador || !nombre || !ubicacion) {
+      mensaje.innerHTML = `<div class="alert alert-danger">Todos los campos son obligatorios.</div>`;
+      return;
+    }
+
+    const dispositivo = {
+      identifica: {
+        identificador,
+        nombre,
+        ubicacion,
+        coordenadas: '19.7060° N, 101.1950° W',
+        idestatus: 1,
+        estatus: 'Operacion Normal',
+        potencia: { nominal: 7.4, minimo: 6.2, maximo: 8.6, um: 'KW' },
+        voltaje: { nominal: 240, minimo: 230, maximo: 250, um: 'Volts' },
+        corriente: { nominal: 30, minimo: 25, maximo: 35, um: 'Amperes' },
+        caudal: { nominal: 1, minimo: 0.10, maximo: 1.20, um: 'm3/minuto' },
+        fechaRegistro: new Date().toUTCString()
+      },
+      opera: {
+        voltaje: 240,
+        corriente: 30,
+        caudal: 1,
+        estatus: 1
+      },
+      estado: 1
+    };
+
+    let dispositivos = JSON.parse(localStorage.getItem('dispositivos') || '[]');
+    dispositivos.push(dispositivo);
+    localStorage.setItem('dispositivos', JSON.stringify(dispositivos));
+
+    mensaje.innerHTML = `<div class="alert alert-success">Dispositivo registrado correctamente. Redirigiendo...</div>`;
+    setTimeout(() => {
+      window.location.href = 'Menu.html'; //antes era Dispositivo.html pero decidi que me lo muestre en el Menu.html.
+    }, 1500);
+  });
+
+  // También enviar al servidor PHP
+   /* fetch('http://localhost/backendphp/registrar_dispositivo.php', {
+    method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dispositivo)
+    })
+    .then(res => res.json())
+    .then(respuesta => {
+        console.log('Respuesta del servidor:', respuesta);
+    })
+    .catch(error => {
+        console.error('Error al enviar al backend:', error);
+    });*/
+
+
+</script>
+
+
+
+
+</body>
+</html>
